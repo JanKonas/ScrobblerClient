@@ -1,0 +1,21 @@
+{
+    "name": "apploud/scrobbler-client",
+    "description": "Client to an internal scrobbler API",
+    "type": "library",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Jan Konáš",
+            "email": "jan.konas@apploud.cz"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Apploud\\ScrobblerClient\\": "src"
+        }
+    },
+    "require": {
+        "php": ">=5.4.0"
+    }
+}
