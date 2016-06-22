@@ -6,7 +6,7 @@ use Apploud\ScrobblerClient\Requests\AccessTokenRequest;
 use Apploud\ScrobblerClient\Requests\BaseRequest;
 use Apploud\ScrobblerClient\Requests\MediaRequest;
 
-class MediaGetter
+class ScrobblerClient
 {
 
 	/** @var string */
