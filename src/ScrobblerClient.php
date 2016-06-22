@@ -2,6 +2,8 @@
 
 namespace Apploud\ScrobblerClient;
 
+use Apploud\ScrobblerClient\Requests\AccessTokenRequest;
+use Apploud\ScrobblerClient\Requests\BaseRequest;
 use Apploud\ScrobblerClient\Requests\MediaRequest;
 
 class MediaGetter
@@ -75,6 +77,27 @@ class MediaGetter
 		$params = array_filter($params);
 		$request = new MediaRequest($tag, $accessToken, $params);
 		return $request->send($this->baseUri, $this->httpAuth);
+	}
+
+	/**
+	 * @param string $key
+	 * @return string
+	 * @throws Exceptions\InvalidStateException
+	 */
+	public function getAccessToken($key)
+	{
+		$request = new AccessTokenRequest($key);
+		$response = $request->send($this->baseUri, $this->httpAuth);
+		return $response->getAccessToken();
+	}
+
+	/**
+	 * @param string $redirUrl
+	 * @return string
+	 */
+	public function getAuthorizationUrl($redirUrl)
+	{
+		return BaseRequest::getUri($this->baseUri, '/token/authorize', ['redirUrl' => $redirUrl]);
 	}
 
 }
