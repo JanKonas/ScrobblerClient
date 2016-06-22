@@ -2,6 +2,8 @@
 
 namespace Apploud\ScrobblerClient;
 
+use Apploud\ScrobblerClient\Requests\MediaRequest;
+
 class MediaGetter
 {
 
@@ -51,6 +53,28 @@ class MediaGetter
 	{
 		$this->httpAuth = ['username' => $username, 'password' => $password];
 		return $this;
+	}
+
+	/**
+	 * @param string $tag
+	 * @param string $accessToken
+	 * @param int|NULL $lastId
+	 * @param string|NULL $type
+	 * @param int|NULL $count
+	 * @param int|NULL $pageLimit
+	 * @return Responses\MediaResponse
+	 */
+	public function getMediaForTag($tag, $accessToken, $lastId = NULL, $type = NULL, $count = NULL, $pageLimit = NULL)
+	{
+		$params = [
+			'lastId' => $lastId,
+			'type' => $type,
+			'count' => $count,
+			'pageLimit' => $pageLimit
+		];
+		$params = array_filter($params);
+		$request = new MediaRequest($tag, $accessToken, $params);
+		return $request->send($this->baseUri, $this->httpAuth);
 	}
 
 }
