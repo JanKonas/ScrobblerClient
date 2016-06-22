@@ -2,6 +2,7 @@
 
 namespace Apploud\ScrobblerClient;
 
+use Apploud\ScrobblerClient\Exceptions\InvalidStateException;
 use Apploud\ScrobblerClient\Requests\AccessTokenRequest;
 use Apploud\ScrobblerClient\Requests\BaseRequest;
 use Apploud\ScrobblerClient\Requests\MediaRequest;
@@ -59,15 +60,18 @@ class ScrobblerClient
 
 	/**
 	 * @param string $tag
-	 * @param string $accessToken
 	 * @param int|NULL $lastId
 	 * @param string|NULL $type
 	 * @param int|NULL $count
 	 * @param int|NULL $pageLimit
 	 * @return Responses\MediaResponse
+	 * @throws InvalidStateException
 	 */
-	public function getMediaForTag($tag, $accessToken, $lastId = NULL, $type = NULL, $count = NULL, $pageLimit = NULL)
+	public function getMediaForTag($tag, $lastId = NULL, $type = NULL, $count = NULL, $pageLimit = NULL)
 	{
+		if (!$this->accessToken) {
+			throw new InvalidStateException('Access token must be set before calling getMediaForTag (see setAccessToken method).');
+		}
 		$params = [
 			'lastId' => $lastId,
 			'type' => $type,
@@ -75,7 +79,7 @@ class ScrobblerClient
 			'pageLimit' => $pageLimit
 		];
 		$params = array_filter($params);
-		$request = new MediaRequest($tag, $accessToken, $params);
+		$request = new MediaRequest($tag, $this->accessToken, $params);
 		return $request->send($this->baseUri, $this->httpAuth);
 	}
 
