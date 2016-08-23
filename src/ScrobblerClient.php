@@ -4,6 +4,7 @@ namespace Apploud\ScrobblerClient;
 
 use Apploud\ScrobblerClient\Exceptions\InvalidStateException;
 use Apploud\ScrobblerClient\Requests\AccessTokenRequest;
+use Apploud\ScrobblerClient\Requests\AddCommentRequest;
 use Apploud\ScrobblerClient\Requests\BaseRequest;
 use Apploud\ScrobblerClient\Requests\MediaRequest;
 
@@ -80,6 +81,21 @@ class ScrobblerClient
 		];
 		$params = array_filter($params);
 		$request = new MediaRequest($tag, $this->accessToken, $params);
+		return $request->send($this->baseUri, $this->httpAuth);
+	}
+
+	/**
+	 * @param int $mediaId
+	 * @param string $text
+	 * @return Responses\BaseResponse
+	 * @throws InvalidStateException
+	 */
+	public function addCommentToMedia($mediaId, $text)
+	{
+		if (!$this->accessToken) {
+			throw new InvalidStateException('Access token must be set before calling addCommentToMedia (see setAccessToken method).');
+		}
+		$request = new AddCommentRequest($mediaId, $text, $this->accessToken);
 		return $request->send($this->baseUri, $this->httpAuth);
 	}
 
