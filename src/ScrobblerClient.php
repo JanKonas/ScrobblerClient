@@ -85,8 +85,8 @@ class ScrobblerClient
 	}
 
 	/**
-	 * @param int $mediaId
-	 * @param string $text
+	 * @param string $mediaId Instagram id of commented media
+	 * @param string $text Comment text
 	 * @return Responses\BaseResponse
 	 * @throws InvalidStateException
 	 */

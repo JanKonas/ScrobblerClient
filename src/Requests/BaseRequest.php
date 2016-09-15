@@ -35,7 +35,7 @@ abstract class BaseRequest
 	{
 		$request = Request::init($this->method)->uri(self::getUri($baseUri, $this->endpoint, $this->params));
 		if ($this->body) {
-			$request->body($this->body, Mime::JSON);
+			$request->body(json_encode($this->body), Mime::JSON);
 		}
 		if ($this->requiresAuth) {
 			if (!is_array($httpAuth) || !array_key_exists('username', $httpAuth) || !array_key_exists('password', $httpAuth)) {
