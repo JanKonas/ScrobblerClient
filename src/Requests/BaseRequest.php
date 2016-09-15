@@ -3,7 +3,9 @@
 namespace Apploud\ScrobblerClient\Requests;
 
 use Apploud\ScrobblerClient\Exceptions\InvalidArgumentException;
+use Apploud\ScrobblerClient\Exceptions\JsonException;
 use Apploud\ScrobblerClient\Responses\BaseResponse;
+use Apploud\ScrobblerClient\Utils\Json;
 use Httpful\Mime;
 use Httpful\Request;
 
@@ -30,12 +32,13 @@ abstract class BaseRequest
 	 * @param array|NULL $httpAuth
 	 * @return BaseResponse
 	 * @throws InvalidArgumentException
+	 * @throws JsonException
 	 */
 	public function send($baseUri, array $httpAuth = NULL)
 	{
 		$request = Request::init($this->method)->uri(self::getUri($baseUri, $this->endpoint, $this->params));
 		if ($this->body) {
-			$request->body(json_encode($this->body), Mime::JSON);
+			$request->body(Json::encode($this->body), Mime::JSON);
 		}
 		if ($this->requiresAuth) {
 			if (!is_array($httpAuth) || !array_key_exists('username', $httpAuth) || !array_key_exists('password', $httpAuth)) {
