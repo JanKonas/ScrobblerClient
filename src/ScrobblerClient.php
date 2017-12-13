@@ -7,6 +7,7 @@ use Apploud\ScrobblerClient\Requests\AccessTokenRequest;
 use Apploud\ScrobblerClient\Requests\AddCommentRequest;
 use Apploud\ScrobblerClient\Requests\BaseRequest;
 use Apploud\ScrobblerClient\Requests\MediaRequest;
+use Apploud\ScrobblerClient\Requests\UserMediaRequest;
 
 class ScrobblerClient
 {
@@ -81,6 +82,31 @@ class ScrobblerClient
 		];
 		$params = array_filter($params);
 		$request = new MediaRequest($tag, $this->accessToken, $params);
+		return $request->send($this->baseUri, $this->httpAuth);
+	}
+
+	/**
+	 * @param string $userId
+	 * @param int|NULL $lastId
+	 * @param string|NULL $type
+	 * @param int|NULL $count
+	 * @param int|NULL $pageLimit
+	 * @return Responses\MediaResponse
+	 * @throws InvalidStateException
+	 */
+	public function getUserMedia($userId, $lastId = NULL, $type = NULL, $count = NULL, $pageLimit = NULL)
+	{
+		if (!$this->accessToken) {
+			throw new InvalidStateException('Access token must be set before calling getUserMedia (see setAccessToken method).');
+		}
+		$params = [
+			'lastId' => $lastId,
+			'type' => $type,
+			'count' => $count,
+			'pageLimit' => $pageLimit
+		];
+		$params = array_filter($params);
+		$request = new UserMediaRequest($userId, $this->accessToken, $params);
 		return $request->send($this->baseUri, $this->httpAuth);
 	}
 
